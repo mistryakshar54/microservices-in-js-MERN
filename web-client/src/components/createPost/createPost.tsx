@@ -1,10 +1,16 @@
 import { Form, TextField, View, Button } from '@adobe/react-spectrum';
+import Axios from 'axios';
 import React, { useState } from 'react';
 import './createPost.css';
 
 const CreatePost = () => {
     const [postTitle , setPostTitle] = useState('');
-    const createNewPost = () => {};
+    const createNewPost = async() => {
+        const { data } = await Axios.post(`http://localhost:8000/api/posts` , { title : postTitle });
+        if( data?.message === 'success' ){
+            setPostTitle('');
+        }
+    }
     return(
         <View UNSAFE_className="card" >
             <h2 id="form title">Create New Post</h2>

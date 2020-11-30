@@ -1,13 +1,20 @@
 import { Button, Form, TextField } from '@adobe/react-spectrum';
+import Axios from 'axios';
 import React, { useState } from 'react';
 
-const CreateComment = () => {
+type CreateCommentProps = { postId : number };
+const CreateComment = ({ postId } : CreateCommentProps) => {
     const [comment , setComment] = useState('');
-    const createNewComment = () => {}
+    const createNewComment = async() => {
+        const { data } = await Axios.post(`http://localhost:8001/api/posts/${postId}/comments` , { comment });
+        if( data?.message === 'success' ){
+            setComment('');
+        }
+    }
     return(
         <Form maxWidth="size-3600">
-            <TextField width="size-3600" value={comment} onChange={setComment} label="Post Title" isRequired={true} placeholder="Write a comment" />
-            <Button width="size-1700" alignSelf="center" marginBottom="size-300" marginTop="size-300" variant="cta" onPress={createNewComment} >Create Post</Button>
+            <TextField width="size-3600" value={comment} onChange={setComment} label="Comment" isRequired={true} placeholder="Write a comment" />
+            <Button width="size-1700" alignSelf="flex-start" marginBottom="size-300" marginTop="size-300" variant="cta" onPress={createNewComment} >Add Comment</Button>
         </Form>
     );
 }
