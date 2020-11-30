@@ -1,5 +1,17 @@
 .card{
     box-shadow: 0px 3px 8px 0px #d8d0d0;
-    padding: 20px;
+    padding: 15px;
     background-color: white;
+    margin:5px
+}
+
+.cardHeader{
+    border-bottom: 1px solid #f6f2f2;
+    margin: 0;
+    padding-bottom: 15px;
+}
+.cardBody{
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
 }

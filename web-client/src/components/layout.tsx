@@ -1,6 +1,7 @@
 import React from 'react';
 import {Flex, Header, Heading} from '@adobe/react-spectrum'
 import CreatePost from './createPost/createPost';
+import PostList from './postList/postList';
 
 const Layout = () => {
     return(
@@ -9,6 +10,7 @@ const Layout = () => {
                 <Heading level={1}>Posts App</Heading>
             </Header>
             <CreatePost />
+            <PostList/>
         </Flex>
     )
 }
