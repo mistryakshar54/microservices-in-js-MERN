@@ -23,7 +23,7 @@ app.post('/api/posts/:id/comments' , jsonParser , async(req , res) => {
     comments.push( { comment , id } );
     commentsByPostId[req.params.id] = comments;
 
-    await axios.post('http://localhost:8005/api/event' , {type : 'CommentCreated' , message : { comment , id }});
+    await axios.post('http://localhost:8005/api/event' , {type : 'CommentCreated' , message : { comment , id, postId : req.params.id }});
   
     res.status(200).json({ message : 'success' , data : comments , length : comments.length })
 });
