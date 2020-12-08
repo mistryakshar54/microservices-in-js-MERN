@@ -1,0 +1,17 @@
+apiVersion: apps/v1  #bucket
+kind: Deployment
+metadata:
+   name: posts-depl  #depl to show deployment
+spec:
+   replicas: 1       #no of pods to create
+   selector:         # find  all pods with label posts
+      matchLabels:
+         app: posts
+   template:         # the pod config. We need the pod to givr label posts
+      metadata:
+         labels:
+            app: posts
+      spec:
+         containers:
+            - name: posts
+              image: mistryakshar54/posts:0.0.1
