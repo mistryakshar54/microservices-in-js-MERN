@@ -1,0 +1,31 @@
+apiVersion: apps/v1  #bucket
+kind: Deployment
+metadata:
+   name: comments-depl  #depl to show deployment
+spec:
+   replicas: 1       #no of pods to create
+   selector:         # find  all pods with label comments
+      matchLabels:
+         app: comments
+   template:         # the pod config. We need the pod to givr label comments
+      metadata:
+         labels:
+            app: comments
+      spec:
+         containers:
+            - name: comments
+              image: mistryakshar54/comments
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: comments-srv
+spec:
+   selector:
+      app: comments
+   ports:
+      - name: comments
+        protocol: TCP
+        port: 8001
+        targetPort: 8001

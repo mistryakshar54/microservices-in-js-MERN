@@ -1,0 +1,31 @@
+apiVersion: apps/v1  #bucket
+kind: Deployment
+metadata:
+   name: event-bus-depl  #depl to show deployment
+spec:
+   replicas: 1       #no of pods to create
+   selector:         # find  all pods with label event-bus
+      matchLabels:
+         app: event-bus
+   template:         # the pod config. We need the pod to givr label event-bus
+      metadata:
+         labels:
+            app: event-bus
+      spec:
+         containers:
+            - name: event-bus
+              image: mistryakshar54/event-bus
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: event-bus-srv
+spec:
+   selector:
+      app: event-bus
+   ports:
+      - name: event-bus
+        protocol: TCP
+        port: 8005
+        targetPort: 8005
