@@ -1,0 +1,31 @@
+apiVersion: apps/v1  #bucket
+kind: Deployment
+metadata:
+   name: query-service-depl  #depl to show deployment
+spec:
+   replicas: 1       #no of pods to create
+   selector:         # find  all pods with label query-service
+      matchLabels:
+         app: query-service
+   template:         # the pod config. We need the pod to givr label query-service
+      metadata:
+         labels:
+            app: query-service
+      spec:
+         containers:
+            - name: query-service
+              image: mistryakshar54/query-service
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: query-service-srv
+spec:
+   selector:
+      app: query-service
+   ports:
+      - name: query-service
+        protocol: TCP
+        port: 8002
+        targetPort: 8002
