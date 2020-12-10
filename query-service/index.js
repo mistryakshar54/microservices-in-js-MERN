@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 const jsonParser = bodyParser.json()
 
 const posts = {};
+const eventBusIP = 'event-bus-srv:8005';
 
 const handleEvents = (type , message) => {
     switch( type ){
@@ -38,7 +39,7 @@ app.get('/api/posts' , (req , res) => res.status(200).json({ message : 'success'
 const server = app.listen( 8002 );
 server.on('listening' , async() => {
     console.log("Query Service listening on 8002");
-    const {data} = await axios.get('http://localhost:8005/api/event');
+    const {data} = await axios.get(`http://${eventBusIP}/api/event`);
     const { eventLogs } = data;
     console.log("eventLogs", eventLogs)
     eventLogs.forEach( log => {
