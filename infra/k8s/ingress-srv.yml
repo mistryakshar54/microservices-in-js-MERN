@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata : 
+    name: ingree-srv
+    annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+    rules:
+        - host: posts.com
+          http: 
+            paths:
+                - path: /api/posts/create
+                  backend:
+                    serviceName: posts-cluserip-srv
+                    servicePort: 8000
+                - path: /api/posts
+                  backend:
+                    serviceName: query-service-srv
+                    servicePort: 8002
+                - path: /api/posts/?(.*)/comments
+                  backend:
+                    serviceName: comments-srv
+                    servicePort: 8001
+                - path: /?(.*)
+                  backend:
+                    serviceName: posts-client-cluserip-srv
+                    servicePort: 3000
