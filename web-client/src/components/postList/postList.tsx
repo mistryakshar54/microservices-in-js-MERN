@@ -15,7 +15,7 @@ const PostList = () => {
 
     useEffect( () => {
         const fetchPosts = async() => {
-            const { data } = await Axios.get('http://localhost:8002/api/posts');
+            const { data } = await Axios.get('http://posts.com/api/posts');
             if( data?.message === 'success' ){
                 setPosts(Object.values( data.data ));
                 setIsLoading(false);

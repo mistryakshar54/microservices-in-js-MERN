@@ -6,7 +6,7 @@ type CreateCommentProps = { postId : number };
 const CreateComment = ({ postId } : CreateCommentProps) => {
     const [comment , setComment] = useState('');
     const createNewComment = async() => {
-        const { data } = await Axios.post(`http://localhost:8001/api/posts/${postId}/comments` , { comment });
+        const { data } = await Axios.post(`http://posts.com/api/posts/${postId}/comments` , { comment });
         if( data?.message === 'success' ){
             setComment('');
         }

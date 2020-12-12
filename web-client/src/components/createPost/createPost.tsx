@@ -6,7 +6,7 @@ import './createPost.css';
 const CreatePost = () => {
     const [postTitle , setPostTitle] = useState('');
     const createNewPost = async() => {
-        const { data } = await Axios.post(`http://localhost:8000/api/posts` , { title : postTitle });
+        const { data } = await Axios.post(`http://posts.com/api/posts/create` , { title : postTitle });
         if( data?.message === 'success' ){
             setPostTitle('');
         }
