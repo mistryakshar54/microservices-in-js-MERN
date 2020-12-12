@@ -16,7 +16,7 @@ app.get('/api/posts' , (req , res) => {
     res.status(200).json({ message : 'success' , data : posts , length : posts.length })
 });
 
-app.post('/api/posts' , jsonParser ,async(req , res) => {
+app.post('/api/posts/create' , jsonParser ,async(req , res) => {
     const { title } = req.body;
     const id = new Date().getTime();
     posts.push( { title , id } );
