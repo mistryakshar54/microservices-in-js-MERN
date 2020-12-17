@@ -1,5 +1,7 @@
 import { Router, Request , Response } from 'express';
 import { body, validationResult } from 'express-validator';
+import { RequestValidationError } from '../errors/requestValidationError';
+import { DBConnectionError } from '../errors/dbConError';
 
 const router = Router();
 router.post('/signup' , [
@@ -8,11 +10,12 @@ router.post('/signup' , [
 ],(req : Request , res : Response) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
-        res.status(400).json({message : errors.array()});
+       throw new RequestValidationError(errors.array());
     }
     const {email , password} = req.body;
     console.log('User created!!');
-    res.status(200).json({message : errors.array()});
+    throw new DBConnectionError();
+    //res.status(200).json({message : errors.array()});
 
 });
 router.post('/signin' , (req, res) => {});
