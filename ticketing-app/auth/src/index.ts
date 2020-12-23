@@ -2,6 +2,8 @@ import express from 'express';
 import { json } from 'body-parser';
 import {authRoutes} from './routes/index';
 import { errorHandler } from './middleware/errorHandler';
+import mongoose from 'mongoose';
+const MONGO_URL = "mongodb://auth-mongo-srv:27017/users";
 
 const app = express();
 app.use(json());
@@ -11,4 +13,19 @@ app.use('/api/users/auth' ,authRoutes);
 
 app.use(errorHandler);
 
-app.listen( 3000 , ()=> console.log('App listening on 3000!!!!'));
+const bootStrap = async() => {
+    try{
+        await mongoose.connect( MONGO_URL , {
+            useNewUrlParser: true,
+            useCreateIndex: true,
+            useUnifiedTopology: true
+        });
+        console.log("Connected to db");
+        app.listen( 3000 , ()=> console.log('App listening on 3000!!!!'));
+    }
+    catch(err){
+        console.log("Error connecting to mongo", err);
+    }
+}
+
+bootStrap();
