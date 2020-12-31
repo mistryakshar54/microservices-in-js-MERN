@@ -15,6 +15,13 @@ spec:
             containers:
                 - name: auth
                   image: mistryakshar54/ticketing-auth
+                  env:
+                    - name: JWT_KEY    #Available to container as JWT_KEY=YOUR_STORED_KEY
+                      valueFrom:
+                        secretKeyRef:
+                            name: jwt-secret   # { jwt-secret : { JWT_KEY : YOUR_STORED_KEY } }
+                            key: JWT_KEY
+
 
 ---
 apiVersion: v1
