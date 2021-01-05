@@ -1,3 +1,4 @@
+import  jwt  from 'jsonwebtoken';
 import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
@@ -14,7 +15,17 @@ app.use(json());
 app.use( cookieSession({ signed: false, httpOnly: true, }) );
 
 
-app.get('/api/users/currentUser' ,( req , res ) => res.status(200).json({message : "This is the current user"}));
+app.get('/api/users/currentUser' ,( req , res ) => {
+    if( !req.session?.jwt ){
+        res.status(200).json({currentUser : null});
+    }
+    try{
+        const decodedToken = jwt.verify( req.session?.jwt , process.env.JWT_KEY!  )
+        res.status(200).json({currentUser : decodedToken});
+    }catch{
+        res.status(200).json({currentUser : null});
+    }  
+});
 app.use('/api/users/auth' ,authRoutes);
 
 app.use(errorHandler);
