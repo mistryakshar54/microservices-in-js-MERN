@@ -8,6 +8,10 @@ build:
     context: auth
     docker:
       dockerfile: Dockerfile
+  - image: mistryakshar54/ticketing-client
+    context: ticketing-client
+    docker:
+      dockerfile: Dockerfile
 deploy:
   kubectl:
     manifests:
