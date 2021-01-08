@@ -3,17 +3,16 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert'
 import useRequest from '../../hooks/useRequest';
+import { useRouter } from 'next/router';
 
 export default () => {
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
-    const { doResponse , isLoading, errors } = useRequest('/api/users/auth/signup', 'post' ,{ email, password });
+    const router = useRouter();
+    const { doResponse , isLoading, errors } = useRequest('/api/users/auth/signup', 'post' ,{ email, password }, ()=>{ router.push('/'); });
     const handleSumbit = async( e ) => {
       e.preventDefault();
-      const result = await doResponse();
-      console.log( "isLoading", isLoading );
-      console.log( "errors", errors );
-      console.log( "result", result );
+      doResponse();
     }
   return (
     <Form onSubmit={handleSumbit}>

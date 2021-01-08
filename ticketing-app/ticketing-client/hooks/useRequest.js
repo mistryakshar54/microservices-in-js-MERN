@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-const useRequest = ( endPoint , method , body = null ) => {
+const useRequest = ( endPoint , method , body = null, callback = null ) => {
     const [errors, setErrors] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const doResponse = async() => {
@@ -9,7 +9,11 @@ const useRequest = ( endPoint , method , body = null ) => {
         try{
             const response = await axios[method]( endPoint, body );
             setErrors([]);
+            if(callback){
+                callback();
+            }
             return response.data;
+
         }
         catch(err){
             console.log(err.response.data);
