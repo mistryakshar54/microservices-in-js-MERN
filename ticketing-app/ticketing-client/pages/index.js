@@ -1,13 +1,10 @@
-import Head from 'next/head'
+import buildClient from '../apis/build-context';
+import Layout from '../UI/layout';
 
-export default function Home() {
+const Home =  function({currentUser}) {
+  console.log("Init Data form LP component", currentUser);
   return (
-    <div className="container">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
+    <Layout>
       <main>
         <h1 className="title">
           Welcome to <a href="https://nextjs.org">Next.js!</a>
@@ -204,6 +201,12 @@ export default function Home() {
           box-sizing: border-box;
         }
       `}</style>
-    </div>
+    </Layout>
   )
 }
+Home.getInitialProps = async(context) => {
+  let client = buildClient(context);
+  const { data } = await client.get('/api/users/currentUser');
+  return data;
+}
+export default Home;
