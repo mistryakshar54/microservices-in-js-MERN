@@ -10,7 +10,7 @@ export default () => {
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
     const router = useRouter();
-    const { doResponse , isLoading, errors } = useRequest('/api/users/auth/signup', 'post' ,{ email, password }, ()=>{ router.push('/'); });
+    const { doResponse , isLoading, errors } = useRequest('/api/users/auth/signin', 'post' ,{ email, password }, ()=>{ router.push('/'); });
     const handleSumbit = async( e ) => {
       e.preventDefault();
       doResponse();
@@ -18,7 +18,7 @@ export default () => {
   return (     
     <Layout>
       <Form onSubmit={handleSumbit}>
-      <h1>Sign Up</h1>
+        <h1>Sign In</h1>
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control type="email" value={email}  onChange={ e => setEmail( e.target.value) } placeholder="Enter email" />
@@ -38,7 +38,7 @@ export default () => {
           </Alert> 
         }
         <Button variant="primary" type="submit">
-          Signup
+          SignIn
         </Button>
       </Form>
     </Layout>
