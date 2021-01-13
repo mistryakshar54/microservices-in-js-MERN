@@ -48,6 +48,9 @@ router.post('/signin',[
     res.status(200).send({ message : 'success', data : existingUser });
 
 });
-router.post('/signout' , (req, res) => {});
+router.post('/signout' , (req, res) => {
+    req.session = null;
+    res.status(200).send({ message : 'success', data : 'User signed out!' });
+});
 
 export {router as authRoutes};
