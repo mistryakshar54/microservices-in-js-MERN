@@ -15,7 +15,7 @@ return <div style={ { margin : '0', padding : '0'} } className="container-fluid"
         <title>{ routeHeaders[router.pathname]?.title }</title>
         <link rel="icon" href="/favicon.ico" />
     </Head>
-    <Header/>
+    {/* <Header/> */}
     {children}
     </div>
 }
