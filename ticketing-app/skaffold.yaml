@@ -1,0 +1,18 @@
+apiVersion: skaffold/v2beta10
+kind: Config
+metadata:
+  name: ticketing-app
+build:
+  artifacts:
+  - image: mistryakshar54/ticketing-auth
+    context: auth
+    docker:
+      dockerfile: Dockerfile
+  - image: mistryakshar54/ticketing-client
+    context: ticketing-client
+    docker:
+      dockerfile: Dockerfile
+deploy:
+  kubectl:
+    manifests:
+    - infra/k8/*
