@@ -1,9 +1,8 @@
 import { Router, Request , Response } from 'express';
 import { body } from 'express-validator';
-import { BadRequestError } from '../errors/badRequestError';
+import { BadRequestError, validationHandler } from '@amdevcorp/ticketing-common';
 import { User } from '../models/users';
 import jwt from 'jsonwebtoken';
-import { validationHandler } from '../middleware/validationHandler';
 import bcrypt from 'bcrypt';
 
 const router = Router();

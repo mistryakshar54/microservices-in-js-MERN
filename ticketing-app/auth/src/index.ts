@@ -3,7 +3,7 @@ import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import {authRoutes} from './routes/index';
-import { errorHandler } from './middleware/errorHandler';
+import { errorHandler } from '@amdevcorp/ticketing-common';
 import mongoose from 'mongoose';
 import cookieSession from 'cookie-session';
 
