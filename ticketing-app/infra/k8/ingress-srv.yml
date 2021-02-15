@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: extensions/v1beta1
 kind: Ingress
 metadata : 
     name: ingress-srv
@@ -18,15 +18,3 @@ spec:
                   backend:
                     serviceName: ticketing-client-srv
                     servicePort: 3000
-                # - path: /api/posts
-                #   backend:
-                #     serviceName: query-service-srv
-                #     servicePort: 8002
-                # - path: /api/posts/?(.*)/comments
-                #   backend:
-                #     serviceName: comments-srv
-                #     servicePort: 8001
-                # - path: /?(.*)
-                #   backend:
-                #     serviceName: posts-client-cluserip-srv
-                #     servicePort: 3000

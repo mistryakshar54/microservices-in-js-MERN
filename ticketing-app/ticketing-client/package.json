@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "dc:build": "docker build -t mistryakshar54/ticketing-client .",
+    "dc:push": "docker push mistryakshar54/ticketing-client"
   },
   "dependencies": {
     "axios": "^0.21.1",

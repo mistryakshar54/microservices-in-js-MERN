@@ -12,6 +12,10 @@ build:
     context: ticketing-client
     docker:
       dockerfile: Dockerfile
+  - image: mistryakshar54/ticketing-tickets
+    context: tickets
+    docker:
+      dockerfile: Dockerfile
 deploy:
   kubectl:
     manifests:

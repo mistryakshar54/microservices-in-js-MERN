@@ -1,39 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: auth-depl
+    name: tickets-depl
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: auth
+            app: tickets
     template:
         metadata:
             labels:
-                app: auth
+                app: tickets
         spec:
             containers:
-                - name: auth
-                  image: mistryakshar54/ticketing-auth
+                - name: tickets
+                  image: mistryakshar54/ticketing-tickets
                   env:
+                    - name: MONGO_URL    #Available to container as MONGO_URL
+                      value: 'mongodb://tickets-mongo-srv:27017/tickets'
                     - name: JWT_KEY    #Available to container as JWT_KEY=YOUR_STORED_KEY
                       valueFrom:
                         secretKeyRef:
                             name: jwt-secret   # { jwt-secret : { JWT_KEY : YOUR_STORED_KEY } }
                             key: JWT_KEY
-                    - name: MONGO_URL    #Available to container as MONGO_URL
-                      value: 'mongodb://tickets-mongo-srv:27017/users'
+
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-    name: auth-srv 
+    name: tickets-srv 
 spec:
     selector:
-        app: auth
+        app: tickets
     ports:
-        - name: auth
+        - name: tickets
           protocol: TCP
           port: 3000   
           targetPort: 3000   

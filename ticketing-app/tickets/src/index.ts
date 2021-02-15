@@ -2,7 +2,7 @@ import  jwt  from 'jsonwebtoken';
 import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
-import {authRoutes} from './routes/index';
+// import {authRoutes} from './routes/index';
 import { errorHandler } from '@amdevcorp/ticketing-common';
 import mongoose from 'mongoose';
 import cookieSession from 'cookie-session';
@@ -24,14 +24,14 @@ app.get('/api/users/currentUser' ,( req , res ) => {
         res.status(200).json({currentUser : null});
     }  
 });
-app.use('/api/users/auth' ,authRoutes);
+// app.use('/api/users/auth' ,authRoutes);
 
 app.use(errorHandler);
 
 const bootStrap = async() => {
 
     if(!process.env.JWT_KEY){
-        throw new Error("ENV Variables not confifugred!!");   
+        throw new Error("JWT_KEY ENV Variable not confifugred!!");   
     }
     if(!process.env.MONGO_URL){
         throw new Error("MONGO_URL ENV Variable not confifugred!!");   
