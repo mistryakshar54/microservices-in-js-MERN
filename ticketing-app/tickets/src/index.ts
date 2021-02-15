@@ -7,7 +7,7 @@ import { errorHandler } from '@amdevcorp/ticketing-common';
 import mongoose from 'mongoose';
 import cookieSession from 'cookie-session';
 
-const MONGO_URL = "mongodb://auth-mongo-srv:27017/users";
+const MONGO_URL = "mongodb://tickets-mongo-srv:27017/users";
 
 const app = express();
 app.set('trust proxy', true); //Make sure express is behind ingress-nginx and thus allows the flow
