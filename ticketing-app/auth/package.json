@@ -4,7 +4,9 @@
   "description": "A microservice for handling auth process",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev src/index.ts"
+    "start": "ts-node-dev src/index.ts",
+    "dc:build": "docker build -t mistryakshar54/ticketing-auth .",
+    "dc:push": "docker push mistryakshar54/ticketing-auth"
   },
   "author": "Akshar Mistry",
   "license": "MIT",

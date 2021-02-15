@@ -4,7 +4,9 @@
   "description": "A microservice for handling tickets process",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev src/index.ts"
+    "start": "ts-node-dev src/index.ts",
+    "dc:build": "docker build -t mistryakshar54/ticketing-tickets .",
+    "dc:push": "docker push mistryakshar54/ticketing-tickets"
   },
   "author": "Akshar Mistry",
   "license": "MIT",
