@@ -21,6 +21,8 @@ spec:
                         secretKeyRef:
                             name: jwt-secret   # { jwt-secret : { JWT_KEY : YOUR_STORED_KEY } }
                             key: JWT_KEY
+                    - name: MONGO_URL    #Available to container as MONGO_URL
+                      value: 'mongodb://tickets-mongo-srv:27017/users'
 
 ---
 apiVersion: v1
