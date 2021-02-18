@@ -5,13 +5,21 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev src/index.ts",
+    "test": "jest --watchAll --no-cache",
     "dc:build": "docker build -t mistryakshar54/ticketing-tickets .",
     "dc:push": "docker push mistryakshar54/ticketing-tickets"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnviornment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test/setup.ts"
+    ]
   },
   "author": "Akshar Mistry",
   "license": "MIT",
   "dependencies": {
-    "@amdevcorp/ticketing-common": "^1.0.5",
+    "@amdevcorp/ticketing-common": "^1.0.8",
     "@types/bcrypt": "^3.0.0",
     "@types/cookie-session": "^2.0.42",
     "@types/express": "^4.17.9",
@@ -26,5 +34,13 @@
     "mongoose": "^5.11.8",
     "ts-node-dev": "^1.1.1",
     "typescript": "^4.1.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.20",
+    "@types/supertest": "^2.0.10",
+    "jest": "^26.6.3",
+    "mongodb-memory-server": "^6.9.3",
+    "supertest": "^6.1.3",
+    "ts-jest": "^26.5.1"
   }
 }
