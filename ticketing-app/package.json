@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@amdevcorp/ticketing-common": "^1.0.9"
+  }
+}

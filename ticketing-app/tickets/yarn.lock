@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@amdevcorp/ticketing-common@^1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@amdevcorp/ticketing-common/-/ticketing-common-1.0.8.tgz#32b550a001e3b40f2bb3a7a5e1dd34d8d4c46717"
-  integrity sha512-63ZHbPAunnyEv8Z/rU42TUv5hP/QvglVvVprCbX6p5wtChrobhR/9OyniAx96BB2W1Tq0vaskvAe399bJwejfA==
+"@amdevcorp/ticketing-common@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@amdevcorp/ticketing-common/-/ticketing-common-1.0.10.tgz#1df65cf6ec6c34b8954251277736f18b08a40f33"
+  integrity sha512-K0SWGbyiNUZEdHNXEBImwO1E5OuVVHBBDdf2L79N2Qd+MR9SiF0iXViJ1I60628Rl8XvQDzv5KQSsKtXEgZBQQ==
   dependencies:
     "@types/express" "^4.17.11"
     "@types/jsonwebtoken" "^8.5.0"
