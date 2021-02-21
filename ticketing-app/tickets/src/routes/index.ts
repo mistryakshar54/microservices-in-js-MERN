@@ -6,7 +6,6 @@ import bcrypt from 'bcrypt';
 
 const router = Router();
 router.post( '/tickets', requireAuth , async(req : Request , res : Response) => {
-    console.log("Henlooo!!! Came here");
     res.status(200).send({message : 'success'});
 });
 // router.post('/signup' , [

@@ -48,7 +48,7 @@ router.post('/signin',[
 
 });
 router.post('/signout' , (req, res) => {
-    req.session = null;
+    req.session.jwt = '';
     res.status(200).send({ message : 'success', data : 'User signed out!' });
 });
 
