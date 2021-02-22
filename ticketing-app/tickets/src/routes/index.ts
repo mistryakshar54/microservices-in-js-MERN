@@ -1,57 +1,36 @@
 import { Router, Request , Response } from 'express';
-import { body } from 'express-validator';
-import { BadRequestError, validationHandler, requireAuth } from '@amdevcorp/ticketing-common';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import { body, param } from 'express-validator';
+import { validationHandler, requireAuth, BadRequestError , NotFoundError } from '@amdevcorp/ticketing-common';
+import { Ticket } from '../models/Tickets';
+import mongo from 'mongodb';
 
 const router = Router();
-router.post( '/tickets', requireAuth , async(req : Request , res : Response) => {
-    res.status(200).send({message : 'success'});
-});
-// router.post('/signup' , [
-//     body('email').isEmail().withMessage('Email must be valid'),
-//     body('password').trim().isLength({ min : 4 , max: 20 }).withMessage("Password must be min 4 and max 20 chars")
-// ], validationHandler, async(req : Request , res : Response) => {
-//     const {email , password} = req.body;
-//     const existingUser = await User.findOne({ email });
-//     if(existingUser){
-//         throw new BadRequestError('Email already in use');
-//     }
-//     const user = User.buildUser({ email, password }) 
-//     await user.save();
-//     //Generate JWT
-//     const jwtToken = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_KEY!)
-//     req.session = {
-//         jwt : jwtToken
-//     }
-//     //Store the session
-//     res.status(201).send({ message : 'success', data : user });
-// });
-// router.post('/signin',[ 
-//     body('email').isEmail().withMessage('Email must be valid'),
-//     body('password').trim().notEmpty().withMessage("Password must not be empty")
-// ], validationHandler , async(req : Request , res : Response) => {
-//     const {email , password} = req.body;
-//     const existingUser = await User.findOne({ email });
-//     if(!existingUser){
-//         throw new BadRequestError('Invalid Credentails');
-//     }
-//     const isValidPwd = bcrypt.compare( password, existingUser.password );
-//     if( !isValidPwd ){
-//         throw new BadRequestError('Invalid Credentails');
-//     }
-//     //Generate JWT
-//     const jwtToken = jwt.sign({ id: existingUser.id, email: existingUser.email }, process.env.JWT_KEY!)
-//     req.session = {
-//         jwt : jwtToken
-//     }
-//     //Store the session
-//     res.status(200).send({ message : 'success', data : existingUser });
 
-// });
-// router.post('/signout' , (req, res) => {
-//     req.session = null;
-//     res.status(200).send({ message : 'success', data : 'User signed out!' });
-// });
+router.post( '/tickets', requireAuth,[
+ body('title').notEmpty().withMessage('Title is required'),
+ body('price').isFloat({ gt : 0 }).withMessage('Price must be greater than 0')   
+], validationHandler , async(req : Request , res : Response) => {
+    const { title, price } = req.body;
+    
+    const ticket = await Ticket.buildTicket( { title , price , userId : req.currentUser!.id} )
+    await ticket.save();
+
+    res.status(201).send({message : 'success', data :  ticket});
+});
+
+router.get( '/tickets/:id',[
+ param('id').notEmpty().withMessage('Ticket id is needed')
+], validationHandler , async(req : Request , res : Response) => {
+    const ticketID = req.params.id
+    const ObjId = mongo.ObjectID;
+    if(! ObjId.isValid(ticketID) ){
+        throw new BadRequestError('Invalid ticket id');
+    }
+    const ticket = await Ticket.findById(ticketID);
+    if(!ticket){
+        throw new NotFoundError(`Ticket id : ${ticketID} not found`);
+    }
+    res.status(200).send({message : 'success', data :  ticket});
+});
 
 export {router as ticketRoutes};
