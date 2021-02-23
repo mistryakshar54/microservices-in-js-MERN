@@ -17,7 +17,7 @@ app.get('/api/users/currentUser' ,( req , res ) => {
         res.status(200).json({currentUser : null});
     }
     try{
-        const decodedToken = jwt.verify( req.session?.jwt , process.env.JWT_KEY!  )
+        const decodedToken = jwt.verify( req.session.jwt , process.env.JWT_KEY!  )
         res.status(200).json({currentUser : decodedToken});
     }catch{
         res.status(200).json({currentUser : null});

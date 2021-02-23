@@ -1,55 +1,63 @@
 import { Router, Request , Response } from 'express';
-import { body } from 'express-validator';
-import { BadRequestError, validationHandler } from '@amdevcorp/ticketing-common';
-import { User } from '../models/users';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import { body, param } from 'express-validator';
+import { validationHandler, requireAuth, BadRequestError , NotFoundError, NotAuthorizedError } from '@amdevcorp/ticketing-common';
+import { Ticket } from '../models/Tickets';
+import mongo from 'mongodb';
 
 const router = Router();
-router.post('/signup' , [
-    body('email').isEmail().withMessage('Email must be valid'),
-    body('password').trim().isLength({ min : 4 , max: 20 }).withMessage("Password must be min 4 and max 20 chars")
-], validationHandler, async(req : Request , res : Response) => {
-    const {email , password} = req.body;
-    const existingUser = await User.findOne({ email });
-    if(existingUser){
-        throw new BadRequestError('Email already in use');
-    }
-    const user = User.buildUser({ email, password }) 
-    await user.save();
-    //Generate JWT
-    const jwtToken = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_KEY!)
-    req.session = {
-        jwt : jwtToken
-    }
-    //Store the session
-    res.status(201).send({ message : 'success', data : user });
-});
-router.post('/signin',[ 
-    body('email').isEmail().withMessage('Email must be valid'),
-    body('password').trim().notEmpty().withMessage("Password must not be empty")
+
+router.post( '/tickets', requireAuth,[
+ body('title').notEmpty().withMessage('Title is required'),
+ body('price').isFloat({ gt : 0 }).withMessage('Price must be greater than 0')   
 ], validationHandler , async(req : Request , res : Response) => {
-    const {email , password} = req.body;
-    const existingUser = await User.findOne({ email });
-    if(!existingUser){
-        throw new BadRequestError('Invalid Credentails');
-    }
-    const isValidPwd = bcrypt.compare( password, existingUser.password );
-    if( !isValidPwd ){
-        throw new BadRequestError('Invalid Credentails');
-    }
-    //Generate JWT
-    const jwtToken = jwt.sign({ id: existingUser.id, email: existingUser.email }, process.env.JWT_KEY!)
-    req.session = {
-        jwt : jwtToken
-    }
-    //Store the session
-    res.status(200).send({ message : 'success', data : existingUser });
+    const { title, price } = req.body;
+    
+    const ticket = await Ticket.buildTicket( { title , price , userId : req.currentUser!.id} )
+    await ticket.save();
 
-});
-router.post('/signout' , (req, res) => {
-    req.session = null;
-    res.status(200).send({ message : 'success', data : 'User signed out!' });
+    res.status(201).send({message : 'success', data :  ticket});
 });
 
-export {router as authRoutes};
+router.get( '/tickets/:id',[
+ param('id').notEmpty().withMessage('Ticket id is needed')
+], validationHandler , async(req : Request , res : Response) => {
+    const ticketID = req.params.id
+    const ObjId = mongo.ObjectID;
+    if(! ObjId.isValid(ticketID) ){
+        throw new BadRequestError('Invalid ticket id');
+    }
+    const ticket = await Ticket.findById(ticketID);
+    if(!ticket){
+        throw new NotFoundError(`Ticket id : ${ticketID} not found`);
+    }
+    res.status(200).send({message : 'success', data :  ticket});
+});
+
+router.get( '/tickets', async(req : Request , res : Response) => {
+    const tickets = await Ticket.find({}) || [];
+    res.status(200).send({message : 'success', data :  tickets});
+});
+
+router.put( '/tickets/:id', requireAuth,[
+    body('title').notEmpty().withMessage('Title is required'),
+    body('price').isFloat({ gt : 0 }).withMessage('Price must be greater than 0')   
+   ], validationHandler , async(req : Request , res : Response) => {
+    const ticketID = req.params.id
+    const ObjId = mongo.ObjectID;
+    if(! ObjId.isValid(ticketID) ){
+        throw new BadRequestError('Invalid ticket id');
+    }
+    const ticket = await Ticket.findById(ticketID);
+    if(!ticket){
+        throw new NotFoundError(`Ticket id : ${ticketID} not found`);
+    }
+    if(ticket.userId != req.currentUser!.id){
+        throw new NotAuthorizedError();
+    }
+    ticket.set({title : req.body.title, price : req.body.price})
+    ticket.save();
+
+    res.status(200).send({message : 'success', data :  ticket});
+   });
+
+export {router as ticketRoutes};
