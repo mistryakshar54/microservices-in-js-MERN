@@ -7,7 +7,7 @@ import { app } from '../app';
 declare global { 
     namespace NodeJS {
         interface Global {
-            getSignUpCookie() : string[];
+            getSignUpCookie(id? : string , email? : string) : string[];
         }
     }
 }
@@ -36,8 +36,8 @@ afterAll( async()=>{
     await mongoose.connection.close();
 } )
 
-global.getSignUpCookie = () => {
-    const jwtToken = jwt.sign({ id: '101', email: 'test@test.com' }, process.env.JWT_KEY!);
+global.getSignUpCookie = (id = '101' , email = 'test@test.com') => {
+    const jwtToken = jwt.sign({ id , email }, process.env.JWT_KEY!);
     const sessionJson = JSON.stringify({ jwt : jwtToken });
     return [`express:sess=${Buffer.from(sessionJson).toString('base64')}`];
 }
