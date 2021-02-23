@@ -2,6 +2,14 @@ import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
 
+const createTicket = (title : string , price : number) => {
+    const cookies = global.getSignUpCookie();
+    return request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookies)
+    .send({ title, price });
+}
+
 it('returns an error if the specified ticket does not exist' , async() => {
     const id = new mongoose.Types.ObjectId().toHexString();
     const resp = await request(app)
@@ -36,4 +44,18 @@ it('returns successfully requested ticket is found' , async() => {
     expect(resp.status).toEqual(200);
     expect(resp.body.message).toEqual('success');
     expect(resp.body.data).toEqual(createdTicket);
+})
+
+it('returns list of tickets' , async() => {
+    
+    await createTicket('Ticket 1', 100);
+    await createTicket('Ticket 2', 200);
+    await createTicket('Ticket 3', 400);
+    
+    const resp = await request(app)
+    .get('/api/tickets')
+
+    expect(resp.status).toEqual(200);
+    expect(resp.body.message).toEqual('success');
+    expect(resp.body.data).toHaveLength(3);
 })
