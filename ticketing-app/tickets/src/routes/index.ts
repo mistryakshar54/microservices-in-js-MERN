@@ -3,6 +3,7 @@ import { body, param } from 'express-validator';
 import { validationHandler, requireAuth, BadRequestError , NotFoundError, NotAuthorizedError } from '@amdevcorp/ticketing-common';
 import { Ticket } from '../models/Tickets';
 import mongo from 'mongodb';
+import { TicketCreatedPublisher } from '../events/ticket-created-publisher';
 
 const router = Router();
 
@@ -14,7 +15,12 @@ router.post( '/tickets', requireAuth,[
     
     const ticket = await Ticket.buildTicket( { title , price , userId : req.currentUser!.id} )
     await ticket.save();
-
+    // new TicketCreatedPublisher().publish({
+    //     id : ticket.id,
+    //     title : ticket.title,
+    //     price: ticket.price,
+    //     userId : ticket.userId
+    // })
     res.status(201).send({message : 'success', data :  ticket});
 });
 
