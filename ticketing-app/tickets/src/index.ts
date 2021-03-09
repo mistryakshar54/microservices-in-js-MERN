@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { app } from './app';
-
+import { natsClient } from './nats-wrapper';
 const bootStrap = async() => {
 
     if(!process.env.JWT_KEY){
@@ -10,6 +10,7 @@ const bootStrap = async() => {
         throw new Error("MONGO_URL ENV Variable not confifugred!!");   
     }
     try{
+        await natsClient.connect('ticketing','aks','http://nats-srv:4222');
         await mongoose.connect( process.env.MONGO_URL , {
             useNewUrlParser: true,
             useCreateIndex: true,
