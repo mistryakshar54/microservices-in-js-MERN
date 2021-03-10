@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
+jest.mock('../../nats-wrapper.ts');
 
 const createTicket = (title : string , price : number) => {
     const cookies = global.getSignUpCookie();

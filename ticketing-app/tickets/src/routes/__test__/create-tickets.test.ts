@@ -2,6 +2,8 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/Tickets';
 
+jest.mock('../../nats-wrapper.ts');
+
 it('returns an error if the user is not authenticated' , async() => {
     const resp = await request(app)
     .post('/api/tickets')

@@ -2,6 +2,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/Tickets';
 import mongoose from 'mongoose';
+jest.mock('../../nats-wrapper.ts');
 
 it('returns an error if the user is not authenticated' , async() => {
     const id = new mongoose.Types.ObjectId().toHexString();

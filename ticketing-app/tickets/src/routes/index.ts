@@ -1,9 +1,11 @@
+import { TicketUpdatedPublisher } from './../events/ticket-update-publisher';
 import { Router, Request , Response } from 'express';
 import { body, param } from 'express-validator';
 import { validationHandler, requireAuth, BadRequestError , NotFoundError, NotAuthorizedError } from '@amdevcorp/ticketing-common';
 import { Ticket } from '../models/Tickets';
 import mongo from 'mongodb';
 import { TicketCreatedPublisher } from '../events/ticket-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = Router();
 
@@ -12,15 +14,20 @@ router.post( '/tickets', requireAuth,[
  body('price').isFloat({ gt : 0 }).withMessage('Price must be greater than 0')   
 ], validationHandler , async(req : Request , res : Response) => {
     const { title, price } = req.body;
-    
     const ticket = await Ticket.buildTicket( { title , price , userId : req.currentUser!.id} )
     await ticket.save();
-    // new TicketCreatedPublisher().publish({
-    //     id : ticket.id,
-    //     title : ticket.title,
-    //     price: ticket.price,
-    //     userId : ticket.userId
-    // })
+    try{
+       await new TicketCreatedPublisher(natsWrapper.client).publish({
+            id : ticket.id,
+            title : ticket.title,
+            price: ticket.price,
+            userId : ticket.userId
+        })
+    }
+    catch(err){
+        console.log(err);
+        throw new BadRequestError(err);
+    }
     res.status(201).send({message : 'success', data :  ticket});
 });
 
@@ -62,6 +69,13 @@ router.put( '/tickets/:id', requireAuth,[
     }
     ticket.set({title : req.body.title, price : req.body.price})
     ticket.save();
+
+    new TicketUpdatedPublisher(natsWrapper.client).publish({
+        id : ticket.id,
+        title : ticket.title,
+        price: ticket.price,
+        userId : ticket.userId
+    });
 
     res.status(200).send({message : 'success', data :  ticket});
    });
