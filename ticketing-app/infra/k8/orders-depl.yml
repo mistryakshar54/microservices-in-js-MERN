@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: orders-depl
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: orders
+    template:
+        metadata:
+            labels:
+                app: orders
+        spec:
+            containers:
+                - name: orders
+                  image: mistryakshar54/ticketing-orders
+                  env:
+                    - name: MONGO_URL    #Available to container as MONGO_URL
+                      value: 'mongodb://orders-mongo-srv:27017/orders'
+                    - name: NATS_URL    #Available to container as MONGO_URL
+                      value: 'http://nats-srv:4222'
+                    - name: NATS_CLUSTER_ID    #Available to container as MONGO_URL
+                      value: 'ticketing'
+                    - name: NATS_CLIENT_ID    #Available to container as MONGO_URL
+                      valueFrom:
+                        fieldRef:
+                            fieldPath: metadata.name
+                    - name: JWT_KEY    #Available to container as JWT_KEY=YOUR_STORED_KEY
+                      valueFrom:
+                        secretKeyRef:
+                            name: jwt-secret   # { jwt-secret : { JWT_KEY : YOUR_STORED_KEY } }
+                            key: JWT_KEY
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: orders-srv 
+spec:
+    selector:
+        app: orders
+    ports:
+        - name: orders
+          protocol: TCP
+          port: 3000   
+          targetPort: 3000   
