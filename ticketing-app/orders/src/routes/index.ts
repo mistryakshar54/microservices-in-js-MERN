@@ -1,8 +1,9 @@
 import { TicketUpdatedPublisher } from './../events/ticket-update-publisher';
 import { Router, Request , Response } from 'express';
 import { body, param } from 'express-validator';
-import { validationHandler, requireAuth, BadRequestError , NotFoundError, NotAuthorizedError } from '@amdevcorp/ticketing-common';
-import { Ticket } from '../models/Orders';
+import { validationHandler, requireAuth, BadRequestError , NotFoundError, NotAuthorizedError, OrderStatus } from '@amdevcorp/ticketing-common';
+import { Order } from '../models/Orders';
+import { Ticket } from '../models/Tickets';
 import mongo from 'mongodb';
 import { TicketCreatedPublisher } from '../events/ticket-created-publisher';
 import { natsWrapper } from '../nats-wrapper';
@@ -14,20 +15,39 @@ router.post( '/tickets', requireAuth,[
  body('ticketId').notEmpty().custom((input : string) => mongoose.Types.ObjectId.isValid(input)).withMessage('Valid ticketId is required'),
 ], validationHandler , async(req : Request , res : Response) => {
     const { ticketId } = req.body;
-    const ticket = await Ticket.buildTicket( { title , price , userId : req.currentUser!.id} )
-    await ticket.save();
-    try{
-       await new TicketCreatedPublisher(natsWrapper.client).publish({
-            id : ticket.id,
-            title : ticket.title,
-            price: ticket.price,
-            userId : ticket.userId
-        })
+    const ObjId = mongo.ObjectID;
+    if(! ObjId.isValid(ticketId) ){
+        throw new BadRequestError('Invalid ticket id');
     }
-    catch(err){
-        console.log(err);
-        throw new BadRequestError(err);
+    const ticket = await Ticket.findById(ticketId);
+    if(!ticket){
+        throw new NotFoundError(`Ticket id : ${ticketId} not found`);
     }
+    const reservedTicket = await ticket.isReserved();
+    if(reservedTicket){
+        throw new NotFoundError(`Ticket is already reserved`);
+    }
+    const expiration = new Date();
+    expiration.setSeconds( expiration.getSeconds() + (15 * 60) );
+    const order = await Order.buildOrder({
+        userId : req.currentUser!.id,
+        status : OrderStatus.CREATED,
+        expiresAt : expiration,
+        ticket
+    })
+    await order.save();
+    // try{
+    //    await new TicketCreatedPublisher(natsWrapper.client).publish({
+    //         id : ticket.id,
+    //         title : ticket.title,
+    //         price: ticket.price,
+    //         userId : ticket.userId
+    //     })
+    // }
+    // catch(err){
+    //     console.log(err);
+    //     throw new BadRequestError(err);
+    // }
     res.status(201).send({message : 'success', data :  ticket});
 });
 
