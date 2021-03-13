@@ -1,6 +1,6 @@
 import { OrderStatus } from '@amdevcorp/ticketing-common';
 import mongoose from 'mongoose';
-
+import { TicketDoc } from './Tickets';
 
 
 type orderAttributes = {
@@ -12,7 +12,7 @@ type orderAttributes = {
 
 interface orderDoc extends mongoose.Document{
     userId : string;
-    status : orderStatus;
+    status : OrderStatus;
     expiresAt : Date;
     ticket : TicketDoc;
 }
