@@ -33,7 +33,7 @@ const orderSchema = new mongoose.Schema({
     expiresAt:{
         type: mongoose.Schema.Types.Date
     },
-    ticketId:{
+    ticket:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Ticket'
     }
@@ -48,7 +48,7 @@ const orderSchema = new mongoose.Schema({
     }
 });
 
-orderSchema.statics.buildorder = ( attr : orderAttributes ) => new Order(attr);
+orderSchema.statics.buildOrder = ( attr : orderAttributes ) => new Order(attr);
 
 const Order = mongoose.model<orderDoc , orderModel>('Order', orderSchema);
 

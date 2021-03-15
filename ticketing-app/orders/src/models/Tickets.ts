@@ -49,7 +49,7 @@ ticketSchema.methods.isReserved = async function(){
             ]
         },
      });
-    return !!reserve dTicket;
+    return !!reservedTicket;
 }
 
 const Ticket = mongoose.model<TicketDoc , TicketModel>('Ticket', ticketSchema);
