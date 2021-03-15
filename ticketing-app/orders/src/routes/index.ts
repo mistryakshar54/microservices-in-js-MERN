@@ -51,53 +51,44 @@ router.post( '/orders', requireAuth,[
     res.status(201).send({message : 'success', data :  order});
 });
 
-// router.get( '/tickets/:id',[
-//  param('id').notEmpty().withMessage('Ticket id is needed')
-// ], validationHandler , async(req : Request , res : Response) => {
-//     const ticketID = req.params.id
-//     const ObjId = mongo.ObjectID;
-//     if(! ObjId.isValid(ticketID) ){
-//         throw new BadRequestError('Invalid ticket id');
-//     }
-//     const ticket = await Ticket.findById(ticketID);
-//     if(!ticket){
-//         throw new NotFoundError(`Ticket id : ${ticketID} not found`);
-//     }
-//     res.status(200).send({message : 'success', data :  ticket});
-// });
+router.get( '/orders/:id',[
+ param('id').notEmpty().withMessage('Order id is needed')
+], validationHandler , async(req : Request , res : Response) => {
+    const orderID = req.params.id
+    const ObjId = mongo.ObjectID;
+    if(! ObjId.isValid(orderID) ){
+        throw new BadRequestError('Invalid order id');
+    }
+    const order = await Order.findById(orderID);
+    if(!order){
+        throw new NotFoundError(`Order id : ${orderID} not found`);
+    }
+    res.status(200).send({message : 'success', data :  order});
+});
 
-// router.get( '/tickets', async(req : Request , res : Response) => {
-//     const tickets = await Ticket.find({}) || [];
-//     res.status(200).send({message : 'success', data :  tickets});
-// });
+router.get( '/orders', requireAuth, async(req : Request , res : Response) => {
+    const orders = await Order.find({ userId : req.currentUser!.id}).populate('ticket') || [];
+    res.status(200).send({message : 'success', data :  orders});
+});
 
-// router.put( '/tickets/:id', requireAuth,[
-//     body('title').notEmpty().withMessage('Title is required'),
-//     body('price').isFloat({ gt : 0 }).withMessage('Price must be greater than 0')   
-//    ], validationHandler , async(req : Request , res : Response) => {
-//     const ticketID = req.params.id
-//     const ObjId = mongo.ObjectID;
-//     if(! ObjId.isValid(ticketID) ){
-//         throw new BadRequestError('Invalid ticket id');
-//     }
-//     const ticket = await Ticket.findById(ticketID);
-//     if(!ticket){
-//         throw new NotFoundError(`Ticket id : ${ticketID} not found`);
-//     }
-//     if(ticket.userId != req.currentUser!.id){
-//         throw new NotAuthorizedError();
-//     }
-//     ticket.set({title : req.body.title, price : req.body.price})
-//     ticket.save();
-
-//     new TicketUpdatedPublisher(natsWrapper.client).publish({
-//         id : ticket.id,
-//         title : ticket.title,
-//         price: ticket.price,
-//         userId : ticket.userId
-//     });
-
-//     res.status(200).send({message : 'success', data :  ticket});
-//    });
+router.delete( '/orders/:id',requireAuth,[
+    param('id').notEmpty().withMessage('Order id is needed')
+   ], validationHandler , async(req : Request , res : Response) => {
+       const orderID = req.params.id
+       const ObjId = mongo.ObjectID;
+       if(! ObjId.isValid(orderID) ){
+           throw new BadRequestError('Invalid order id');
+       }
+       const order = await Order.findById(orderID);
+       if(!order){
+           throw new NotFoundError(`Order id : ${orderID} not found`);
+       }
+       if( order.userId != req.currentUser!.id){
+            throw new NotAuthorizedError();
+       }
+       order.status = OrderStatus.CANCELLED;
+       await order.save()
+       res.status(204).send({message : 'success', data :  order});
+   });
 
 export {router as orderRoutes};
