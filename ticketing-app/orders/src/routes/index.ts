@@ -11,7 +11,7 @@ import mongoose from 'mongoose';
 
 const router = Router();
 
-router.post( '/tickets', requireAuth,[
+router.post( '/orders', requireAuth,[
  body('ticketId').notEmpty().custom((input : string) => mongoose.Types.ObjectId.isValid(input)).withMessage('Valid ticketId is required'),
 ], validationHandler , async(req : Request , res : Response) => {
     const { ticketId } = req.body;
@@ -25,7 +25,7 @@ router.post( '/tickets', requireAuth,[
     }
     const reservedTicket = await ticket.isReserved();
     if(reservedTicket){
-        throw new NotFoundError(`Ticket is already reserved`);
+        throw new BadRequestError(`Ticket is already reserved`);
     }
     const expiration = new Date();
     expiration.setSeconds( expiration.getSeconds() + (15 * 60) );
@@ -48,7 +48,7 @@ router.post( '/tickets', requireAuth,[
     //     console.log(err);
     //     throw new BadRequestError(err);
     // }
-    res.status(201).send({message : 'success', data :  ticket});
+    res.status(201).send({message : 'success', data :  order});
 });
 
 // router.get( '/tickets/:id',[
