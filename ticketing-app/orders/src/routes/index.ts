@@ -1,11 +1,11 @@
-import { TicketUpdatedPublisher } from './../events/ticket-update-publisher';
+import { OrderCancelledPublisher } from './../events/order-cancelled-publisher';
 import { Router, Request , Response } from 'express';
 import { body, param } from 'express-validator';
 import { validationHandler, requireAuth, BadRequestError , NotFoundError, NotAuthorizedError, OrderStatus } from '@amdevcorp/ticketing-common';
 import { Order } from '../models/Orders';
 import { Ticket } from '../models/Tickets';
 import mongo from 'mongodb';
-import { TicketCreatedPublisher } from '../events/ticket-created-publisher';
+import { OrderCreatedPublisher } from '../events/order-created-publisher';
 import { natsWrapper } from '../nats-wrapper';
 import mongoose from 'mongoose';
 
@@ -36,18 +36,22 @@ router.post( '/orders', requireAuth,[
         ticket
     })
     await order.save();
-    // try{
-    //    await new TicketCreatedPublisher(natsWrapper.client).publish({
-    //         id : ticket.id,
-    //         title : ticket.title,
-    //         price: ticket.price,
-    //         userId : ticket.userId
-    //     })
-    // }
-    // catch(err){
-    //     console.log(err);
-    //     throw new BadRequestError(err);
-    // }
+    try{
+       await new OrderCreatedPublisher(natsWrapper.client).publish({
+            id : order.id,
+            status : order.status,
+            expiresAt : order.expiresAt.toISOString(),
+            ticket : {
+                id : ticket.id,
+                price : ticket.price
+            },
+            userId : order.userId
+        })
+    }
+    catch(err){
+        console.log(err);
+        throw new BadRequestError(err);
+    }
     res.status(201).send({message : 'success', data :  order});
 });
 
@@ -79,7 +83,7 @@ router.delete( '/orders/:id',requireAuth,[
        if(! ObjId.isValid(orderID) ){
            throw new BadRequestError('Invalid order id');
        }
-       const order = await Order.findById(orderID);
+       const order = await Order.findById(orderID).populate('ticket');
        if(!order){
            throw new NotFoundError(`Order id : ${orderID} not found`);
        }
@@ -88,6 +92,19 @@ router.delete( '/orders/:id',requireAuth,[
        }
        order.status = OrderStatus.CANCELLED;
        await order.save()
+       try{
+        await new OrderCancelledPublisher(natsWrapper.client).publish({
+             id : order.id,
+             ticket : {
+                id : order.ticket.id,
+                price : order.ticket.price
+             },
+         })
+     }
+     catch(err){
+         console.log(err);
+         throw new BadRequestError(err);
+     }
        res.status(204).send({message : 'success', data :  order});
    });
 
