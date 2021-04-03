@@ -1,0 +1,1 @@
+export const OrderServiceQueueGroup = 'orders-service';
