@@ -1,3 +1,5 @@
+import { TicketCreatedListner } from './events/listners/ticket-created-listner';
+import { TicketUpdatedListner } from './events/listners/ticket-updated-listner';
 import mongoose from 'mongoose';
 import { app } from './app';
 import { natsWrapper } from './nats-wrapper';
@@ -27,6 +29,9 @@ const bootStrap = async() => {
         process.on('SIGINT', () => natsWrapper.client.close());
         process.on('SIGTERM', () => natsWrapper.client.close());
         
+        new TicketCreatedListner(natsWrapper.client).listen();
+        new TicketUpdatedListner(natsWrapper.client).listen();
+
         await mongoose.connect( process.env.MONGO_URL , {
             useNewUrlParser: true,
             useCreateIndex: true,
