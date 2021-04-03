@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { Order } from './Orders';
 
 type ticketAttributes = {
+    id : string;
     title : string;
     price : number;
 }
@@ -37,9 +38,12 @@ const ticketSchema = new mongoose.Schema({
     }
 });
 
-ticketSchema.statics.buildTicket = ( attr : ticketAttributes ) => new Ticket(attr);
+ticketSchema.statics.buildTicket = ( attr : ticketAttributes ) => new Ticket(
+    {_id : attr.id, title : attr.title , price : attr.price}
+);
 ticketSchema.methods.isReserved = async function(){
     const reservedTicket = await Order.findOne({ 
+        //@ts-ignore
         ticket : this,
         status: {
             $in:[
