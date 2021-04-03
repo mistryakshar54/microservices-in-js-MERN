@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@amdevcorp/ticketing-common@^1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@amdevcorp/ticketing-common/-/ticketing-common-1.0.18.tgz#fa3642653c3bf8a62abb6a420baa7fd1ade6da6f"
-  integrity sha512-imsjrFAWPKRZ9mtpdCfj6A8vPVOcfj05iZc5tmGaRbPCMhIjDtAWlGdv7iEb7XaaVq6qgzPoQH0SCLdHZUG5VA==
+"@amdevcorp/ticketing-common@^1.0.21":
+  version "1.0.21"
+  resolved "https://registry.yarnpkg.com/@amdevcorp/ticketing-common/-/ticketing-common-1.0.21.tgz#772fd813ab5501b41a9854166d6cc5ca564912d6"
+  integrity sha512-awhXI+gnzA/CmsMgEHZCnynLchi2le1rYAeulhdZDWZDVqUQ6whFZ05wnIZS07MzZpGG0b1VCij07aZ3yAp+Rg==
   dependencies:
     "@types/express" "^4.17.11"
     "@types/jsonwebtoken" "^8.5.0"
@@ -630,9 +630,9 @@
   integrity sha512-t73xJJrvdTjXrn4jLS9VSGRbz0nUY3cl2DMGDU48lKl+HR9dbbjW2A9r3g40VA++mQpy6uuHg33gy7du2BKpog==
 
 "@types/express-serve-static-core@^4.17.18":
-  version "4.17.18"
-  resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.18.tgz#8371e260f40e0e1ca0c116a9afcd9426fa094c40"
-  integrity sha512-m4JTwx5RUBNZvky/JJ8swEJPKFd8si08pPF2PfizYjGZOKr/svUWPcoUmLow6MmPzhasphB7gSTINY67xn3JNA==
+  version "4.17.19"
+  resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.19.tgz#00acfc1632e729acac4f1530e9e16f6dd1508a1d"
+  integrity sha512-DJOSHzX7pCiSElWaGR8kCprwibCB/3yW6vcT8VG3P0SJjnv19gnWG/AZMfM60Xj/YJIp/YCaDHyvzsFVeniARA==
   dependencies:
     "@types/node" "*"
     "@types/qs" "*"
@@ -708,9 +708,9 @@
   integrity sha512-YATxVxgRqNH6nHEIsvg6k2Boc1JHI9ZbH5iWFFv/MTkchz3b1ieGDa5T0a9RznNdI0KhVbdbWSN+KWWrQZRxTw==
 
 "@types/minimatch@*":
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
-  integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.4.tgz#f0ec25dbf2f0e4b18647313ac031134ca5b24b21"
+  integrity sha512-1z8k4wzFnNjVK/tlxvrWuK5WMt6mydWWP7+zvH5eFep4oj+UkrfiJTRtjCeBXNpwaA/FYqqtb4/QS4ianFpIRA==
 
 "@types/minimist@^1.2.0":
   version "1.2.1"
@@ -734,9 +734,9 @@
     "@types/node" "*"
 
 "@types/node@*":
-  version "14.14.33"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.33.tgz#9e4f8c64345522e4e8ce77b334a8aaa64e2b6c78"
-  integrity sha512-oJqcTrgPUF29oUP8AsUqbXGJNuPutsetaa9kTQAQce5Lx5dTYWV02ScBiT/k1BX/Z7pKeqedmvp39Wu4zR7N7g==
+  version "14.14.37"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.37.tgz#a3dd8da4eb84a996c36e331df98d82abd76b516e"
+  integrity sha512-XYmBiy+ohOR4Lh5jE379fV2IU+6Jn4g5qASinhitfyO71b/sCo6MKsMLF5tc7Zf2CE8hViVQyYSobJNke8OvUw==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -2352,9 +2352,9 @@ globby@^10.0.1:
     slash "^3.0.0"
 
 google-protobuf@^3.11.2:
-  version "3.15.6"
-  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.15.6.tgz#2048055828530993a51df4d4ca2c08322fc1ec7c"
-  integrity sha512-p65NyhIZFHFUxbIPOm6cygg2rCjK+2uDCxruOG3RaWKM9R4rBGX0STmlJoSOhoyAG8Fha7U8FP4pQomAV1JXsA==
+  version "3.15.7"
+  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.15.7.tgz#c65eb96d9e1c8d146eea16508ff94b00d24dd1e3"
+  integrity sha512-S/kTHcT98AV2FxEwtT5lvgffeS87BB6hloZm+pYKkpzwtySwNiKcqXZbxpq/Odh3Wib1RdOe/oY2EHdi17YrlQ==
 
 graceful-fs@^4.1.2, graceful-fs@^4.2.2, graceful-fs@^4.2.4:
   version "4.2.6"
@@ -4271,9 +4271,9 @@ qs@~6.5.2:
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
 
 queue-microtask@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.2.tgz#abf64491e6ecf0f38a6502403d4cda04f372dfd3"
-  integrity sha512-dB15eXv3p2jDlbOiNLyMabYg1/sXvppd8DP2J3EOCQ0AkuSXCW2tP7mnVouVLJKgUMY6yP0kcQDVpLCN13h4Xg==
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
+  integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
 quick-lru@^4.0.1:
   version "4.0.1"
