@@ -1,16 +1,18 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 type ticketAttributes = {
     title : string;
     price : number;
     userId : string;
 }
 
-interface TicketDoc extends mongoose.Document{
-    title : string;
+//List all props that the ticket doc has
+interface TicketDoc extends mongoose.Document{  
+    title : string; 
     price : number;
     userId : string;
+    version : number;
 }
 interface TicketModel extends mongoose.Model<TicketDoc>{
     buildTicket( attr : ticketAttributes ) : TicketDoc;
@@ -48,6 +50,8 @@ ticketSchema.pre( 'save', async function( done ) {
     }
     done();
 } )
+ticketSchema.set('versionKey','version');   //rename ticket schema __v => version
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 ticketSchema.statics.buildTicket = ( attr : ticketAttributes ) => new Ticket(attr);
 
