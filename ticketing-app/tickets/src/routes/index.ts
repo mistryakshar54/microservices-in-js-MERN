@@ -21,14 +21,15 @@ router.post( '/tickets', requireAuth,[
             id : ticket.id,
             title : ticket.title,
             price: ticket.price,
-            userId : ticket.userId
+            userId : ticket.userId,
+            version : ticket.version,
         })
     }
     catch(err){
         console.log(err);
         throw new BadRequestError(err);
     }
-    res.status(201).send({message : 'success', data :  ticket});
+    res.status(201).send({message : 'success', data :  {ticket}});
 });
 
 router.get( '/tickets/:id',[
@@ -68,13 +69,14 @@ router.put( '/tickets/:id', requireAuth,[
         throw new NotAuthorizedError();
     }
     ticket.set({title : req.body.title, price : req.body.price})
-    ticket.save();
+    await ticket.save();
 
     new TicketUpdatedPublisher(natsWrapper.client).publish({
         id : ticket.id,
         title : ticket.title,
         price: ticket.price,
-        userId : ticket.userId
+        userId : ticket.userId,
+        version : ticket.version,
     });
 
     res.status(200).send({message : 'success', data :  ticket});
