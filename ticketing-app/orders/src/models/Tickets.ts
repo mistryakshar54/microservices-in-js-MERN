@@ -1,6 +1,7 @@
 import { OrderStatus } from '@amdevcorp/ticketing-common';
 import mongoose from 'mongoose';
 import { Order } from './Orders';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 type ticketAttributes = {
     id : string;
@@ -11,6 +12,7 @@ type ticketAttributes = {
 export interface TicketDoc extends mongoose.Document{
     title : string;
     price : number;
+    version : number;
     isReserved() : Promise<boolean>;
 }
 interface TicketModel extends mongoose.Model<TicketDoc>{
@@ -34,7 +36,7 @@ const ticketSchema = new mongoose.Schema({
             delete ret._id;
             delete ret.password;
         },
-        versionKey: false
+        versionKey: true
     }
 });
 
@@ -55,6 +57,8 @@ ticketSchema.methods.isReserved = async function(){
      });
     return !!reservedTicket;
 }
+ticketSchema.set('versionKey','version');   //rename ticket schema __v => version
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 const Ticket = mongoose.model<TicketDoc , TicketModel>('Ticket', ticketSchema);
 

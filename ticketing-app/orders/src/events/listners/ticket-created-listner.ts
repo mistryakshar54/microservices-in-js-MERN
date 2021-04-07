@@ -7,12 +7,12 @@ export class TicketCreatedListner extends Listner<TicketCreatedEvent> {
     readonly subject = Subjects.TicketCreated;
     queueGroup = OrderServiceQueueGroup;
     async onMessage(data: TicketCreatedEvent['data'] , msg: Message): Promise<void> {
-        console.log('Event data', data);
+        console.log('Order Service : TicketCreatedListner', data);
         const {id, title, price } = data;
         const ticket =  Ticket.buildTicket({
             id,
             title,
-            price
+            price,
         })
         await ticket.save();
         msg.ack();

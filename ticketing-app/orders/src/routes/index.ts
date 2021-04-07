@@ -43,9 +43,10 @@ router.post( '/orders', requireAuth,[
             expiresAt : order.expiresAt.toISOString(),
             ticket : {
                 id : ticket.id,
-                price : ticket.price
+                price : ticket.price,
+                version : order.ticket.version,
             },
-            userId : order.userId
+            userId : order.userId,
         })
     }
     catch(err){
@@ -71,6 +72,7 @@ router.get( '/orders/:id',[
 });
 
 router.get( '/orders', requireAuth, async(req : Request , res : Response) => {
+    console.log("Came here");
     const orders = await Order.find({ userId : req.currentUser!.id}).populate('ticket') || [];
     res.status(200).send({message : 'success', data :  orders});
 });
@@ -97,7 +99,8 @@ router.delete( '/orders/:id',requireAuth,[
              id : order.id,
              ticket : {
                 id : order.ticket.id,
-                price : order.ticket.price
+                price : order.ticket.price,
+                version : order.ticket.version,
              },
          })
      }
