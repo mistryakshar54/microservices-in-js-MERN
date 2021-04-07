@@ -20,7 +20,7 @@ spec:
                     servicePort: 3000
                 - path: /api/orders/?(.*)
                   backend:
-                    serviceName: tickets-srv
+                    serviceName: orders-srv
                     servicePort: 3000
                 - path: /?(.*)
                   backend:
