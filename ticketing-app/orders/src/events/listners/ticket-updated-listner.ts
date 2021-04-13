@@ -8,10 +8,7 @@ export class TicketUpdatedListner extends Listner<TicketUpdatedEvent> {
     queueGroup = OrderServiceQueueGroup;
     async onMessage(data: TicketUpdatedEvent['data'] , msg: nats.Message): Promise<void> {
         console.log('Order Service : TicketUpdatedListner', data);
-        const ticket =  await Ticket.findOne({
-           _id : data.id,
-           version : data.version - 1,
-        });
+        const ticket =  await Ticket.findEvent( data.id , data.version );
         if(!ticket){
             throw new NotFoundError(`Ticket id : ${data.id} not found`);
         }
