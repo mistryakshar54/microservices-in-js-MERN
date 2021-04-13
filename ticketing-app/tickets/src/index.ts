@@ -1,6 +1,8 @@
+import { OrderCreatedListner } from './events/listners/order-created-listner';
 import mongoose from 'mongoose';
 import { app } from './app';
 import { natsWrapper } from './nats-wrapper';
+import { OrderCancelledListner } from './events/listners/order-cancelled-listner';
 const bootStrap = async() => {
 
     if(!process.env.JWT_KEY){
@@ -26,7 +28,9 @@ const bootStrap = async() => {
         });
         process.on('SIGINT', () => natsWrapper.client.close());
         process.on('SIGTERM', () => natsWrapper.client.close());
-        
+        new OrderCreatedListner(natsWrapper.client).listen();
+        new OrderCancelledListner(natsWrapper.client).listen();
+
         await mongoose.connect( process.env.MONGO_URL , {
             useNewUrlParser: true,
             useCreateIndex: true,

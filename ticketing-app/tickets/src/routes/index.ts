@@ -68,6 +68,9 @@ router.put( '/tickets/:id', requireAuth,[
     if(ticket.userId != req.currentUser!.id){
         throw new NotAuthorizedError();
     }
+    if(ticket.orderId){
+        throw new BadRequestError('Ticket already associated to an order');
+    }
     ticket.set({title : req.body.title, price : req.body.price})
     await ticket.save();
 
