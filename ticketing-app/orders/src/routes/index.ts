@@ -28,7 +28,7 @@ router.post( '/orders', requireAuth,[
         throw new BadRequestError(`Ticket is already reserved`);
     }
     const expiration = new Date();
-    expiration.setSeconds( expiration.getSeconds() + (15 * 60) );
+    expiration.setSeconds( expiration.getSeconds() + (1 * 60) );
     const order = await Order.buildOrder({
         userId : req.currentUser!.id,
         status : OrderStatus.CREATED,

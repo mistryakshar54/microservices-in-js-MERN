@@ -20,6 +20,10 @@ build:
     context: orders
     docker:
       dockerfile: Dockerfile
+  - image: mistryakshar54/ticketing-expiration
+    context: expiration
+    docker:
+      dockerfile: Dockerfile
 deploy:
   kubectl:
     manifests:

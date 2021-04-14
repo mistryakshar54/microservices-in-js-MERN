@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: expiration-depl
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: expiration
+    template:
+        metadata:
+            labels:
+                app: expiration
+        spec:
+            containers:
+                - name: expiration
+                  image: mistryakshar54/ticketing-expiration
+                  env:
+                    - name: REDIS_HOST    #Available to container as REDIS_HOST
+                      value: 'expiration-redis-srv'
+                    - name: NATS_URL    #Available to container as MONGO_URL
+                      value: 'http://nats-srv:4222'
+                    - name: NATS_CLUSTER_ID    #Available to container as MONGO_URL
+                      value: 'ticketing'
+                    - name: NATS_CLIENT_ID    #Available to container as MONGO_URL
+                      valueFrom:
+                        fieldRef:
+                            fieldPath: metadata.name
