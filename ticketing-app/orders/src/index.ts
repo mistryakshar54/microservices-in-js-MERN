@@ -3,6 +3,7 @@ import { TicketUpdatedListner } from './events/listners/ticket-updated-listner';
 import mongoose from 'mongoose';
 import { app } from './app';
 import { natsWrapper } from './nats-wrapper';
+import { ExiprationCompleteListner } from './events/listners/expiration-complete-listner';
 const bootStrap = async() => {
 
     if(!process.env.JWT_KEY){
@@ -31,7 +32,8 @@ const bootStrap = async() => {
         
         new TicketCreatedListner(natsWrapper.client).listen();
         new TicketUpdatedListner(natsWrapper.client).listen();
-
+        new ExiprationCompleteListner(natsWrapper.client).listen();
+        
         await mongoose.connect( process.env.MONGO_URL , {
             useNewUrlParser: true,
             useCreateIndex: true,

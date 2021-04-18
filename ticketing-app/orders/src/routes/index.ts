@@ -98,9 +98,7 @@ router.delete( '/orders/:id',requireAuth,[
         await new OrderCancelledPublisher(natsWrapper.client).publish({
              id : order.id,
              ticket : {
-                id : order.ticket.id,
-                price : order.ticket.price,
-                version : order.ticket.version,
+                id : order.ticket.id
              },
          })
      }
