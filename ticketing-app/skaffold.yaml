@@ -24,6 +24,10 @@ build:
     context: expiration
     docker:
       dockerfile: Dockerfile
+  - image: mistryakshar54/ticketing-payments
+    context: payments
+    docker:
+      dockerfile: Dockerfile
 deploy:
   kubectl:
     manifests:

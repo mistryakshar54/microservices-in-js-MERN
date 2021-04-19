@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: payments-depl
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: payments
+    template:
+        metadata:
+            labels:
+                app: payments
+        spec:
+            containers:
+                - name: payments
+                  image: mistryakshar54/ticketing-payments
+                  env:
+                    - name: MONGO_URL    #Available to container as MONGO_URL
+                      value: 'mongodb://payments-mongo-srv:27017/payments'
+                    - name: NATS_URL    #Available to container as MONGO_URL
+                      value: 'http://nats-srv:4222'
+                    - name: NATS_CLUSTER_ID    #Available to container as MONGO_URL
+                      value: 'ticketing'
+                    - name: NATS_CLIENT_ID    #Available to container as MONGO_URL
+                      valueFrom:
+                        fieldRef:
+                            fieldPath: metadata.name
+                    - name: JWT_KEY    #Available to container as JWT_KEY=YOUR_STORED_KEY
+                      valueFrom:
+                        secretKeyRef:
+                            name: jwt-secret   # { jwt-secret : { JWT_KEY : YOUR_STORED_KEY } }
+                            key: JWT_KEY
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: payments-srv 
+spec:
+    selector:
+        app: payments
+    ports:
+        - name: payments
+          protocol: TCP
+          port: 3000   
+          targetPort: 3000   
