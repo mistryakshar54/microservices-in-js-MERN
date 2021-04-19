@@ -19,7 +19,7 @@
   "author": "Akshar Mistry",
   "license": "MIT",
   "dependencies": {
-    "@amdevcorp/ticketing-common": "^1.0.29",
+    "@amdevcorp/ticketing-common": "^1.0.30",
     "@types/bull": "^3.15.0",
     "@types/node": "^14.14.37",
     "bull": "^3.22.0",

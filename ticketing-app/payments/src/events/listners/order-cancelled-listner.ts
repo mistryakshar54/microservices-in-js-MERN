@@ -1,28 +1,20 @@
 import {Message} from 'node-nats-streaming';
-import { Listner, Subjects, OrderCancelledEvent, NotFoundError } from '@amdevcorp/ticketing-common';
-import { TicketServiceQueueGroup } from './queue-group-name';
-import { Ticket } from '../../models/Tickets';
-import { TicketUpdatedPublisher } from '../ticket-update-publisher';
+import { Listner, Subjects, OrderCancelledEvent, NotFoundError, OrderStatus } from '@amdevcorp/ticketing-common';
+import { PaymentServiceQueueGroup } from './queue-group-name';
+import { Order } from '../../models/Orders';
 
 export class OrderCancelledListner extends Listner<OrderCancelledEvent> {
     readonly subject = Subjects.OrderCancelled;
-    queueGroup = TicketServiceQueueGroup;
+    queueGroup = PaymentServiceQueueGroup;
     async onMessage(data: OrderCancelledEvent['data'] , msg: Message): Promise<void> {
-        console.log('Order Service : OrderCancelledListner', data);
-        const ticket = await Ticket.findById(data.ticket.id);
-        if(!ticket){
-            throw new NotFoundError('Ticket with ID not found');
+        console.log('Payment Service : OrderCancelledListner', data);
+        const order = await Order.findById(data.id);
+        if(!order){
+            throw new NotFoundError('Order with ID not found');
         }
-        ticket.set({ orderId: undefined });
-        await ticket.save();
-        new TicketUpdatedPublisher(this.client).publish({
-            id : ticket.id,
-            price : ticket.price,
-            title : ticket.title,
-            orderId : ticket.orderId,
-            version : ticket.version,
-            userId : ticket.userId
-        });
+        order.set({ status: OrderStatus.CANCELLED });
+        await order.save();
+        
         msg.ack();
     }
 } 

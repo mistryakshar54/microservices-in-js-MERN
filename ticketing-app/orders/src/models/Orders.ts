@@ -46,7 +46,7 @@ const orderSchema = new mongoose.Schema({
             delete ret._id;
             delete ret.password;
         },
-        versionKey: false
+        versionKey: true
     }
 });
 orderSchema.set('versionKey','version');   //rename ticket schema __v => version

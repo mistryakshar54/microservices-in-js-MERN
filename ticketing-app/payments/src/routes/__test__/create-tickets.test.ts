@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { app } from '../../app';
-import { Ticket } from '../../models/Tickets';
+import { Ticket } from '../../models/Orders';
 
 jest.mock('../../nats-wrapper.ts');
 

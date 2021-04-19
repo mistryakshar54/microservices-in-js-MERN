@@ -1,1 +1,1 @@
-export const TicketServiceQueueGroup = 'tickets-service';
+export const PaymentServiceQueueGroup = 'payments-service';
