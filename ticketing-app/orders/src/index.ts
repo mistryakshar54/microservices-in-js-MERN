@@ -1,3 +1,4 @@
+import { OrderCompletedListner } from './events/listners/order-completed-listner';
 import { TicketCreatedListner } from './events/listners/ticket-created-listner';
 import { TicketUpdatedListner } from './events/listners/ticket-updated-listner';
 import mongoose from 'mongoose';
@@ -33,6 +34,7 @@ const bootStrap = async() => {
         new TicketCreatedListner(natsWrapper.client).listen();
         new TicketUpdatedListner(natsWrapper.client).listen();
         new ExiprationCompleteListner(natsWrapper.client).listen();
+        new OrderCompletedListner(natsWrapper.client).listen();
         
         await mongoose.connect( process.env.MONGO_URL , {
             useNewUrlParser: true,
