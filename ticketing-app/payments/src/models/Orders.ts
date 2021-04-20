@@ -32,7 +32,7 @@ const orderSchema = new mongoose.Schema({
     },
     status:{
         type: String,
-        required: false
+        required: true
     }
 },{
     toJSON : {
@@ -52,7 +52,7 @@ orderSchema.statics.buildOrder = ( attr : orderAttributes ) => new Order({
     _id : attr.id,
     price : attr.price,
     userId : attr.userId,
-    stauts : attr.status,
+    status : attr.status,
     version : attr.version
 });
 
