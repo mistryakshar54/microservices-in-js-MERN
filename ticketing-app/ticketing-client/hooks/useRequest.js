@@ -4,10 +4,17 @@ import axios from 'axios';
 const useRequest = ( endPoint , method , body = null, callback = null ) => {
     const [errors, setErrors] = useState([]);
     const [isLoading, setLoading] = useState(false);
-    const doResponse = async() => {
+    const doResponse = async(params) => {
+        console.log("params", params);
         setLoading(true);
         try{
-            const response = await axios[method]( endPoint, body );
+            let response;
+            if(params){
+                response = await axios[method]( endPoint, params );
+            }
+            else{
+                response = await axios[method]( endPoint, body );
+            }
             setErrors([]);
             if(callback){
                 callback();
