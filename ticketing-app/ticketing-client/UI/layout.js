@@ -10,12 +10,11 @@ const routeHeaders = {
 export default ({children}) => {
     const router = useRouter();
     console.log('Routes: ', router.pathname);
-return <div style={ { margin : '0', padding : '0'} } className="container-fluid">
+return <div className="container-fluid layout">
     <Head>
         <title>{ routeHeaders[router.pathname]?.title }</title>
         <link rel="icon" href="/favicon.ico" />
     </Head>
-    {/* <Header/> */}
     {children}
     </div>
 }

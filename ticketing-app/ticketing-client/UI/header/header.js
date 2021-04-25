@@ -7,6 +7,9 @@ export default ({currentUser}) => {
       if( currentUser ){
         return [
           <Link href="/"><a className="nav-link">Hi {currentUser.email}</a></Link>,
+          <Link href="/tickets/new"><a className="nav-link">Create Ticket</a></Link>,
+          <Link href="/orders/new"><a className="nav-link">Create Order</a></Link>,
+          <Link href="/orders"><a className="nav-link">View Orders</a></Link>,
           <Link href="/auth/signout"><a className="nav-link">SignOut</a></Link>
         ]
       }
@@ -17,11 +20,11 @@ export default ({currentUser}) => {
         ]
       }
     }
-    return(<Navbar bg="dark" variant="dark">
-    <Link href="/"><Navbar.Brand>Get Tix</Navbar.Brand></Link>
+    return(<Navbar bg="light" variant="light">
+    <Navbar.Brand><Link href="/">Get Tix</Link></Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
-      <Nav className="mr-auto">
+      <Nav>
         { getNavOptions() }
       </Nav>
     </Navbar.Collapse>
