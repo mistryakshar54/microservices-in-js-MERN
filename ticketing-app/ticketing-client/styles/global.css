@@ -9,10 +9,19 @@ a{
     margin: 0;
     padding: 2% 5%!important;
 }
-
+.nav-link{
+    font-size: 1.2rem!important;
+    font-weight: 700!important;
+}
 .navbar-brand{
     font-weight: 700;
     font-size: 2.5rem;
+    cursor: pointer;
+}
+
+.navbar-brand :hover{
+    color: #e29404;
+    text-decoration: none;
 }
 nav{
     padding: 1% 5%!important;
@@ -39,19 +48,25 @@ nav{
 }
 
 .listItem > a{
-    color: orange;
+    color: orange!important;
     font-weight: 500;
+    cursor: pointer;
 }
 
 .content-title{
     color: #656565;
     font-weight: 900;
     font-size: 2em;
+    margin: 1% 0%;
 }
 
 .content-info-title{
     color: #656565;
     font-weight: 300;
     font-size: 1.5em;
-    margin: 0.5%;
+    margin: 1% 0%;
+}
+
+#basic-navbar-nav{
+    justify-content: flex-end!important;
 }
