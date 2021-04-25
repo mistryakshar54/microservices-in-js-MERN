@@ -1,12 +1,14 @@
 import Layout from '../UI/layout';
-import Link from 'next/link'
+import { useRouter } from 'next/router';
 import useRequest from '../hooks/useRequest';
 
 const Home =  function({currentUser , tickets}) {
+  const router = useRouter();
   const { doResponse , isLoading, errors } = useRequest('/api/orders', 'post' , null, (order)=>{ console.log("order",order) });
   const makePurchase = async(ticketId) => {
    const resp = await doResponse({ticketId});
-   console.log('Resp', resp);
+   const { data } = resp;
+   router.push(`/orders/${data.id}`);
   }
   return (
     <Layout>
@@ -14,17 +16,17 @@ const Home =  function({currentUser , tickets}) {
         tickets?.length > 0 ?
       
       <div className='list'>
-        <h1 className='content-title'>Your Tickets</h1>
+        <h1 className='content-title'>Available Tickets</h1>
         { tickets.map ( ticket => <div className='listItem'>
           <span>{ `${ticket.title} - ${ticket.price} $` }</span>
-          {/* <Link 
-            href={`/tickets/[ticketId]`}
-            as={`/tickets/${ticket.id}`}
-          >View</Link> */}
-          <a onClick={() => makePurchase(ticket.id)}>Purchase</a>
+          { 
+            !currentUser?
+            <a>Signin to purchase</a>
+            : <a onClick={() => makePurchase(ticket.id)}>Purchase</a>
+          }
           </div>) }
       </div>
-      : <h1>No tickets to display</h1>
+      : <h1 className='content-title'>No tickets to display</h1>
       }
     </Layout>
   )

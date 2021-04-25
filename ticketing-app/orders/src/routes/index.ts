@@ -65,7 +65,7 @@ router.get( '/orders/:id',[
     if(! ObjId.isValid(orderID) ){
         throw new BadRequestError('Invalid order id');
     }
-    const order = await Order.findById(orderID);
+    const order = await Order.findById(orderID).populate('ticket');
     if(!order){
         throw new NotFoundError(`Order id : ${orderID} not found`);
     }

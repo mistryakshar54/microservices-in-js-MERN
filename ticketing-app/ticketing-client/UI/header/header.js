@@ -8,8 +8,7 @@ export default ({currentUser}) => {
         return [
           <Link href="/"><a className="nav-link">Hi {currentUser.email}</a></Link>,
           <Link href="/tickets/new"><a className="nav-link">Create Ticket</a></Link>,
-          <Link href="/orders/new"><a className="nav-link">Create Order</a></Link>,
-          <Link href="/orders"><a className="nav-link">View Orders</a></Link>,
+          <Link href="/orders/list"><a className="nav-link">View Orders</a></Link>,
           <Link href="/auth/signout"><a className="nav-link">SignOut</a></Link>
         ]
       }
